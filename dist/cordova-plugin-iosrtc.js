@@ -712,7 +712,7 @@ MediaStreamRenderer.prototype.save = function (callback) {
 
 MediaStreamRenderer.prototype.refresh = function () {
 	debug('refresh()');
-
+//TODO: Manuel added window.customIosrtcNeedsRotation
 	var elementPositionAndSize = getElementPositionAndSize.call(this),
 		computedStyle,
 		videoRatio,
@@ -734,6 +734,7 @@ MediaStreamRenderer.prototype.refresh = function () {
 		paddingBottom,
 		paddingLeft,
 		paddingRight,
+        needsRotation = window.customIosrtcNeedsRotation,
 		self = this;
 
 	computedStyle = window.getComputedStyle(this.element);
@@ -752,8 +753,8 @@ MediaStreamRenderer.prototype.refresh = function () {
 	elementWidth -= (paddingLeft + paddingRight);
 	elementHeight -= (paddingTop + paddingBottom);
 
-	videoViewWidth = elementWidth;
-	videoViewHeight = elementHeight;
+	videoViewWidth = window.customIosrtcNeedsRotation ? 1 : elementWidth;
+	videoViewHeight = window.customIosrtcNeedsRotation ? 1 : elementHeight;
 
 	// visible
 	if (computedStyle.visibility === 'hidden') {
@@ -906,7 +907,8 @@ MediaStreamRenderer.prototype.refresh = function () {
 			mirrored: mirrored,
 			objectFit: objectFit,
 			clip: clip,
-			borderRadius: borderRadius
+			borderRadius: borderRadius,
+            needsRotation: window.customIosrtcNeedsRotation
 		},
 		newRefreshCached = hash(JSON.stringify(data));
 
